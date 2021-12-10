@@ -10,6 +10,7 @@ url_base = 'http://books.toscrape.com/'
 
 
 def recuperation_informations_page_livre(url_page_livre):
+    '''Fonction permettant d'extraire les informations d'un livre dans une liste en sortie à partir de son url.'''
 
     # Initialisation requête + data
     response = requests.get(url_page_livre)
@@ -75,7 +76,9 @@ def recuperation_informations_page_livre(url_page_livre):
 
         # Avis ('review_rating')
         block_avis = soup.find('div', class_='col-sm-6 product_main')
-        review_rating_string = str(block_avis.find_all('p')[2]).split('"')[1].split(' ')[1]
+        review_rating_string = (
+            str(block_avis.find_all('p')[2]).split('"')[1].split(' ')[1]
+        )
         if review_rating_string == 'One':
             review_rating = 1
         elif review_rating_string == 'Two':
@@ -88,13 +91,15 @@ def recuperation_informations_page_livre(url_page_livre):
             review_rating = 5
         data['review_rating'] = str(review_rating)
 
-        return(data)
+        return data
 
     else:
         return str("Message d'erreur : réponse à la requête négative. Revoir url.")
 
 
 def initialistation_csv(categorie_livre):
+    '''Fonction pour créer le fichier CSV initiale pour une catégorie donnée.
+    Le fichier portera le nom de la catégorie entrée en argument.'''
 
     headers_csv = [
         'product_page_url',
@@ -109,11 +114,17 @@ def initialistation_csv(categorie_livre):
         'image_url',
     ]
 
-    with open(repertoire_de_travail+'/Donnees_Resultat/'+str(categorie_livre)+'.csv', 'w', newline='') as csvfile:
+    with open(
+        repertoire_de_travail + '/Donnees_Resultat/' + str(categorie_livre) + '.csv',
+        'w',
+        newline='',
+    ) as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=headers_csv)
         writer.writeheader()
 
-def ecriture_sur_CSV(donnee_a_ecrire,categorie_livre):
+
+def ecriture_sur_CSV(donnee_a_ecrire, categorie_livre):
+    '''Fonction pour écrire les données de chaque livre sur le fichier CSV correspondant à la catégorie du livre'''
 
     headers_csv = [
         'product_page_url',
@@ -128,12 +139,16 @@ def ecriture_sur_CSV(donnee_a_ecrire,categorie_livre):
         'image_url',
     ]
 
-    with open(repertoire_de_travail+'/Donnees_Resultat/'+str(categorie_livre)+'.csv', 'a', newline='') as csvfile:
+    with open(
+        repertoire_de_travail + '/Donnees_Resultat/' + str(categorie_livre) + '.csv',
+        'a',
+        newline='',
+    ) as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=headers_csv)
         writer.writerow(donnee_a_ecrire)
 
 
-def extraire_liste_livres(categorie_livre_url, liste_livre =[]):
+def extraire_liste_livres(categorie_livre_url, liste_livre=[]):
     '''Fonction permettant d'obternir en sortie une liste contenant l'url de chacun des livres présents dans la catégorie.
     Cette fonction est récursive pour tenir compte de la pagination.'''
 
@@ -147,9 +162,17 @@ def extraire_liste_livres(categorie_livre_url, liste_livre =[]):
         soup = BeautifulSoup(response.text, 'html.parser')
 
         # Recherche des url de livres
-        blocks_livres = soup.find_all('li', class_='col-xs-6 col-sm-4 col-md-3 col-lg-3')
+        blocks_livres = soup.find_all(
+            'li', class_='col-xs-6 col-sm-4 col-md-3 col-lg-3'
+        )
         for livre in blocks_livres:
-            liste_livre.append(str(url_base + 'catalogue/' + str(livre).split('"')[7].split('../../../')[1]))
+            liste_livre.append(
+                str(
+                    url_base
+                    + 'catalogue/'
+                    + str(livre).split('"')[7].split('../../../')[1]
+                )
+            )
 
         # Detection page 'Next' et itération
         block_url_page_suivante = soup.find_all('li', class_='next')
@@ -158,16 +181,36 @@ def extraire_liste_livres(categorie_livre_url, liste_livre =[]):
             url_livre_base_liste = category_url.split('/')[:-1]
             for element in url_livre_base_liste:
                 url_livre_base += str(element) + '/'
-            extraire_liste_livres(url_livre_base + str(block_url_page_suivante[0]).split('"')[3],liste_livre)
+            extraire_liste_livres(
+                url_livre_base + str(block_url_page_suivante[0]).split('"')[3],
+                liste_livre,
+            )
 
         return liste_livre
 
+def ecriture_categorie(categorie_livre_url):
+    '''Function permettant d'extraire toutes les informations de tous les livres d'un même catégorie.
+    Toutes ces informations seront écrites sur un même fichier CSV portant le nom de la categorie'''
+
+    # Extraire liste des url de livres
+    liste_livre = extraire_liste_livres(categorie_livre_url)
+
+    # Inititalisation CSV par catégorie
+    categorie = recuperation_informations_page_livre(liste_livre[0])['category']
+    initialistation_csv(categorie)
+
+    # Itération sur tous les livres dans la catégorie
+    for livre in liste_livre:
+        data = recuperation_informations_page_livre(livre)
+        ecriture_sur_CSV(data,data['category'])
 
 
-category_url = 'https://books.toscrape.com/catalogue/category/books/nonfiction_13/index.html'
 
 
-resultat = extraire_liste_livres(category_url)
-print(len(resultat))
+
+category_url = (
+    'https://books.toscrape.com/catalogue/category/books/nonfiction_13/index.html'
+)
 
 
+ecriture_categorie(category_url)

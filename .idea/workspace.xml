@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fe54bb3c-594d-43ab-9fdb-a1dd96eb92f9" name="Changes" comment="Création fonctions pour Ecrire les données dans un fichier CSV (initialistation_csv et ecriture_sur_CSV)">
-      <change beforePath="$PROJECT_DIR$/.idea/P2-Repo.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+    <list default="true" id="fe54bb3c-594d-43ab-9fdb-a1dd96eb92f9" name="Changes" comment="Création d'une fonction pour Extraire la liste des livres (url de la page produit) pour une catégorie de livre donnée (extraire_liste_livres)">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scraper.py" beforeDir="false" afterPath="$PROJECT_DIR$/scraper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -72,7 +67,14 @@
       <option name="project" value="LOCAL" />
       <updated>1639136853031</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Création d'une fonction pour Extraire la liste des livres (url de la page produit) pour une catégorie de livre donnée (extraire_liste_livres)">
+      <created>1639150749844</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1639150749844</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -91,6 +93,7 @@
     <MESSAGE value="Initial Commit" />
     <MESSAGE value="Création Fonction recuperation_informations_page_livre" />
     <MESSAGE value="Création fonctions pour Ecrire les données dans un fichier CSV (initialistation_csv et ecriture_sur_CSV)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Création fonctions pour Ecrire les données dans un fichier CSV (initialistation_csv et ecriture_sur_CSV)" />
+    <MESSAGE value="Création d'une fonction pour Extraire la liste des livres (url de la page produit) pour une catégorie de livre donnée (extraire_liste_livres)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Création d'une fonction pour Extraire la liste des livres (url de la page produit) pour une catégorie de livre donnée (extraire_liste_livres)" />
   </component>
 </project>
