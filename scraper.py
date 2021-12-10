@@ -1,7 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
+import csv
+import os
 
-url = 'https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html'
+repertoire_de_travail = str(os.path.dirname(os.path.realpath(__file__)))
+
+url = 'https://books.toscrape.com/catalogue/tipping-the-velvet_999/index.html'
 url_base = 'http://books.toscrape.com/'
 
 
@@ -90,5 +94,47 @@ def recuperation_informations_page_livre(url_page_livre):
         return str("Message d'erreur : réponse à la requête négative. Revoir url.")
 
 
-print(recuperation_informations_page_livre(url))
+def initialistation_csv(categorie_livre):
+
+    headers_csv = [
+        'product_page_url',
+        'universal_product_code',
+        'title',
+        'price_including_tax',
+        'price_excluding_tax',
+        'number_available',
+        'product_description',
+        'category',
+        'review_rating',
+        'image_url',
+    ]
+
+    with open(repertoire_de_travail+'/Donnees_Resultat/'+str(categorie_livre)+'.csv', 'w', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=headers_csv)
+        writer.writeheader()
+
+def ecriture_sur_CSV(donnee_a_ecrire,categorie_livre):
+
+    headers_csv = [
+        'product_page_url',
+        'universal_product_code',
+        'title',
+        'price_including_tax',
+        'price_excluding_tax',
+        'number_available',
+        'product_description',
+        'category',
+        'review_rating',
+        'image_url',
+    ]
+
+    with open(repertoire_de_travail+'/Donnees_Resultat/'+str(categorie_livre)+'.csv', 'a', newline='') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=headers_csv)
+        writer.writerow(donnee_a_ecrire)
+
+initialistation_csv(recuperation_informations_page_livre(url)['category'])
+
+ecriture_sur_CSV(recuperation_informations_page_livre(url),recuperation_informations_page_livre(url)['category'])
+
+
 
