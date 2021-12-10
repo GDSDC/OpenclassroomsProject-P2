@@ -5,9 +5,6 @@ import os
 
 repertoire_de_travail = str(os.path.dirname(os.path.realpath(__file__)))
 
-url = 'https://books.toscrape.com/catalogue/tipping-the-velvet_999/index.html'
-url_base = 'http://books.toscrape.com/'
-
 
 def recuperation_informations_page_livre(url_page_livre):
     '''Fonction permettant d'extraire les informations d'un livre dans une liste en sortie à partir de son url.'''
@@ -71,7 +68,7 @@ def recuperation_informations_page_livre(url_page_livre):
         # URL de l'image ('image_url')
         block_image = soup.find('div', class_='item active')
         data['image_url'] = str(
-            str(url_base) + str(block_image).split('"')[5].split('../../')[1]
+            'http://books.toscrape.com/' + str(block_image).split('"')[5].split('../../')[1]
         )
 
         # Avis ('review_rating')
@@ -168,8 +165,7 @@ def extraire_liste_livres(categorie_livre_url, liste_livre=[]):
         for livre in blocks_livres:
             liste_livre.append(
                 str(
-                    url_base
-                    + 'catalogue/'
+                    'http://books.toscrape.com/catalogue/'
                     + str(livre).split('"')[7].split('../../../')[1]
                 )
             )
@@ -205,12 +201,26 @@ def ecriture_categorie(categorie_livre_url):
         ecriture_sur_CSV(data,data['category'])
 
 
+def extraire_liste_categorie_url():
+    '''Function permettant d'extraire dans une liste l'ensemble des categories disponibles sous forme d'url.'''
 
+    # Initialisation requête + liste_categorie
+    books_home_url = 'https://books.toscrape.com/catalogue/category/books_1/index.html'
+    response = requests.get(books_home_url)
+    liste_categorie = []
 
+    # Récupération des informations
+    if response.ok:
 
-category_url = (
-    'https://books.toscrape.com/catalogue/category/books/nonfiction_13/index.html'
-)
+        # HTML PARSER
+        soup = BeautifulSoup(response.text, 'html.parser')
 
+        # Block Liste de categorie
+        block_categories = soup.find('ul', class_='nav nav-list')
+        block_categories_lignes = block_categories.find_all('a')
 
-ecriture_categorie(category_url)
+        # Itération sur chaque categorie
+        for categorie in range(1,len(block_categories_lignes)):
+            liste_categorie.append(str('https://books.toscrape.com/catalogue/category/' + str(block_categories_lignes[categorie]).split('"')[1].split('../')[1]))
+
+        return liste_categorie
