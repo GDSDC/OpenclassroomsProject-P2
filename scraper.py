@@ -174,7 +174,7 @@ def extraire_liste_livres(categorie_livre_url, liste_livre=[]):
         block_url_page_suivante = soup.find_all('li', class_='next')
         if block_url_page_suivante != []:
             url_livre_base = ''
-            url_livre_base_liste = category_url.split('/')[:-1]
+            url_livre_base_liste = categorie_livre_url.split('/')[:-1]
             for element in url_livre_base_liste:
                 url_livre_base += str(element) + '/'
             extraire_liste_livres(
@@ -224,3 +224,21 @@ def extraire_liste_categorie_url():
             liste_categorie.append(str('https://books.toscrape.com/catalogue/category/' + str(block_categories_lignes[categorie]).split('"')[1].split('../')[1]))
 
         return liste_categorie
+
+
+def extraire_tout():
+    '''Fonction permettant d'extraire les informations de tous les produits parmis toutes les catégories du site'''
+
+    # Extraction de la liste des catégories
+    liste_categorie = extraire_liste_categorie_url()
+
+    # Extraction des informations de tous les livres pour chaque catégorie
+    for categorie_url in liste_categorie:
+        ecriture_categorie(categorie_url)
+
+
+# extraire_tout()
+
+resultat = extraire_liste_livres('https://books.toscrape.com/catalogue/category/books/sequential-art_5/index.html')
+print(len(resultat))
+print(resultat)
