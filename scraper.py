@@ -202,8 +202,6 @@ def ecriture_categorie(categorie_livre_url):
     # Inititalisation CSV par catégorie
     categorie = recuperation_informations_page_livre(liste_livre[0])['category']
     initialistation_csv(categorie)
-    print('initialistation_csv faite !')
-    print('Catégorie = ' + categorie)
 
     # Itération sur tous les livres dans la catégorie
     for livre in liste_livre:
