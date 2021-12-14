@@ -68,7 +68,8 @@ def recuperation_informations_page_livre(url_page_livre):
         # URL de l'image ('image_url')
         block_image = soup.find('div', class_='item active')
         data['image_url'] = str(
-            'http://books.toscrape.com/' + str(block_image).split('"')[5].split('../../')[1]
+            'http://books.toscrape.com/'
+            + str(block_image).split('"')[5].split('../../')[1]
         )
 
         # Avis ('review_rating')
@@ -76,6 +77,7 @@ def recuperation_informations_page_livre(url_page_livre):
         review_rating_string = (
             str(block_avis.find_all('p')[2]).split('"')[1].split(' ')[1]
         )
+        review_rating = ''
         if review_rating_string == 'One':
             review_rating = 1
         elif review_rating_string == 'Two':
@@ -111,6 +113,11 @@ def initialistation_csv(categorie_livre):
         'image_url',
     ]
 
+    # Création Dossier 'Donnees_Resultat' si nécessaire dans le répertoire de travail
+    if os.path.exists(repertoire_de_travail+'/Donnees_Resultat') == False:
+        os.makedirs(repertoire_de_travail+'/Donnees_Resultat')
+
+    #Création du CSV portant le nom de la catégorie et écriture des entêtes
     with open(
         repertoire_de_travail + '/Donnees_Resultat/' + str(categorie_livre) + '.csv',
         'w',
@@ -184,6 +191,7 @@ def extraire_liste_livres(categorie_livre_url, liste_livre=[]):
 
         return liste_livre
 
+
 def ecriture_categorie(categorie_livre_url):
     '''Function permettant d'extraire toutes les informations de tous les livres d'un même catégorie.
     Toutes ces informations seront écrites sur un même fichier CSV portant le nom de la categorie'''
@@ -194,11 +202,13 @@ def ecriture_categorie(categorie_livre_url):
     # Inititalisation CSV par catégorie
     categorie = recuperation_informations_page_livre(liste_livre[0])['category']
     initialistation_csv(categorie)
+    print('initialistation_csv faite !')
+    print('Catégorie = ' + categorie)
 
     # Itération sur tous les livres dans la catégorie
     for livre in liste_livre:
         data = recuperation_informations_page_livre(livre)
-        ecriture_sur_CSV(data,data['category'])
+        ecriture_sur_CSV(data, data['category'])
 
 
 def extraire_liste_categorie_url():
@@ -220,8 +230,15 @@ def extraire_liste_categorie_url():
         block_categories_lignes = block_categories.find_all('a')
 
         # Itération sur chaque categorie
-        for categorie in range(1,len(block_categories_lignes)):
-            liste_categorie.append(str('https://books.toscrape.com/catalogue/category/' + str(block_categories_lignes[categorie]).split('"')[1].split('../')[1]))
+        for categorie in range(1, len(block_categories_lignes)):
+            liste_categorie.append(
+                str(
+                    'https://books.toscrape.com/catalogue/category/'
+                    + str(block_categories_lignes[categorie])
+                    .split('"')[1]
+                    .split('../')[1]
+                )
+            )
 
         return liste_categorie
 
@@ -237,8 +254,4 @@ def extraire_tout():
         ecriture_categorie(categorie_url)
 
 
-# extraire_tout()
-
-resultat = extraire_liste_livres('https://books.toscrape.com/catalogue/category/books/sequential-art_5/index.html')
-print(len(resultat))
-print(resultat)
+extraire_tout()
