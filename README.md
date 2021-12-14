@@ -7,17 +7,7 @@ Thème du projet : Utilisez les bases de Python pour l'analyse de marché.
 
 ### 1. Récupération du projet sur votre machine locale
 
-Créez votre répertoire de travail à l'emplacement souhaité sur votre machine.
-
-```bash
-cd /emplacement souhaité/
-
-mkdir Répertoire de travail
-
-cd Répertoire de travail/
-```
-
-Clonez le repository dans le répertoire local souhaité (votre répertoire de travail).
+Clonez le repository sur votre machine.
 
 ```bash
 git clone https://github.com/GDSDC/OpenclassroomsProject-P2.git
