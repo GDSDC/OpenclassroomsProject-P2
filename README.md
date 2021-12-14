@@ -23,6 +23,11 @@ Clonez le repository dans le répertoire local souhaité (votre répertoire de t
 git clone https://github.com/GDSDC/OpenclassroomsProject-P2.git
 ```
 
+Accédez au répertoire cloné.
+```bash
+cd OpenclassroomsProject-P2
+```
+
 ### 2. Création d'un environnement virtuel 
 Créez l'environnement virtuel env.
 ```bash
