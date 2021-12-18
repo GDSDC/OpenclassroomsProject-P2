@@ -75,6 +75,10 @@ def recuperation_informations_page_livre(url_page_livre: str) -> Dict[str, str]:
             + str(block_image).split('"')[5].split('../../')[1]
         )
 
+        # Récupération image de couverture
+        telechargement_image_livre(data['image_url'], data['universal_product_code'])
+
+
         # Avis ('review_rating')
         block_avis = soup.find('div', class_='col-sm-6 product_main')
         review_rating_string = (
@@ -94,6 +98,21 @@ def recuperation_informations_page_livre(url_page_livre: str) -> Dict[str, str]:
         data['review_rating'] = str(review_rating)
 
         return data
+
+
+def telechargement_image_livre(image_url_value: str, upc_value: str):
+    '''Fonction permettant de télécharger l'image de couverture du livre correspondant à l'url du livre en entrée.
+    Toutes les images de couvertures seront placées dans le dossier '/Donnees_Resultat/Couvertures' présant dans le dossier de travail.
+    Toutes les images de couvertures seront nommées par la valeur de l'UPC.'''
+
+    # Création Dossier 'Couvertures' si nécessaire dans le dossier 'Donnees_Resultat'
+    if os.path.exists(repertoire_de_travail + '/Donnees_Resultat' + '/Couvertures') == False:
+        os.makedirs(repertoire_de_travail + '/Donnees_Resultat' + '/Couvertures')
+
+    # Enregistrement de l'image de couverture
+    r = requests.get(image_url_value, allow_redirects=True)
+    image_path = repertoire_de_travail + '/Donnees_Resultat' + '/Couvertures' + '/' + upc_value + '.jpeg'
+    open(image_path, 'wb').write(r.content)
 
 
 def ecriture_csv(categorie_livre: str, liste_donnees_par_livre: List[Dict[str, str]]):
