@@ -6,6 +6,7 @@ import csv
 import os
 
 repertoire_de_travail = str(os.path.dirname(os.path.realpath(__file__)))
+books_home_url = 'https://books.toscrape.com/catalogue/category/books_1/index.html'
 
 
 def recuperation_informations_page_livre(url_page_livre: str) -> Dict[str, str]:
@@ -96,7 +97,7 @@ def recuperation_informations_page_livre(url_page_livre: str) -> Dict[str, str]:
 
 
 def ecriture_csv(categorie_livre: str, liste_donnees_par_livre: List[Dict[str, str]]):
-    '''Fonction pour créer le fichier CSV initiale pour une catégorie donnée.
+    '''Fonction pour créer le fichier CSV pour une catégorie donnée.
     Le fichier portera le nom de la catégorie entrée en argument.'''
 
     headers_csv = [
@@ -119,11 +120,13 @@ def ecriture_csv(categorie_livre: str, liste_donnees_par_livre: List[Dict[str, s
     # Création du CSV portant le nom de la catégorie et écriture des entêtes
     nom_du_csv = repertoire_de_travail + '/Donnees_Resultat/' + str(categorie_livre) + '.csv'
     print(f'Ecriture du csv {nom_du_csv}')
-    print(f'{len(liste_donnees_par_livre)} livres écrits pour la catégorie {categorie_livre}.')
+
     with open(nom_du_csv, 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=headers_csv)
         writer.writeheader()
         writer.writerows(liste_donnees_par_livre)
+
+    print(f'{len(liste_donnees_par_livre)} livres écrits pour la catégorie {categorie_livre}.')
 
 
 def extraire_liste_livres(categorie_livre_url :str) -> List[str]:
@@ -154,7 +157,6 @@ def extraire_liste_livres(categorie_livre_url :str) -> List[str]:
 
         # Detection page 'Next' et itération
         block_url_page_suivante = soup.find_all('li', class_='next')
-#        donnees_liste_livre = []
         if block_url_page_suivante != []:
             url_livre_base = ''
             url_livre_base_liste = categorie_livre_url.split('/')[:-1]
@@ -207,11 +209,10 @@ def extraire_list_categorie_url_extraction(contenu_html: str) -> List[str]:
     return liste_categorie
 
 
-def extraire_liste_categorie_url():
+def extraire_liste_categorie_url() -> List[str]:
     '''Function permettant d'extraire dans une liste l'ensemble des categories disponibles sous forme d'url.'''
 
     # Initialisation requête + liste_categorie
-    books_home_url = 'https://books.toscrape.com/catalogue/category/books_1/index.html'
     response = requests.get(books_home_url)
     # Récupération des informations
     if response.ok:
