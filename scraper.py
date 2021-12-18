@@ -119,6 +119,7 @@ def ecriture_csv(categorie_livre: str, liste_donnees_par_livre: List[Dict[str, s
     # Création du CSV portant le nom de la catégorie et écriture des entêtes
     nom_du_csv = repertoire_de_travail + '/Donnees_Resultat/' + str(categorie_livre) + '.csv'
     print(f'Ecriture du csv {nom_du_csv}')
+    print(f'{len(liste_donnees_par_livre)} livres écrits pour la catégorie {categorie_livre}.')
     with open(nom_du_csv, 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=headers_csv)
         writer.writeheader()
@@ -166,7 +167,7 @@ def extraire_liste_livres(categorie_livre_url :str) -> List[str]:
         return donnees_liste_livre
 
 
-def ecriture_categorie(categorie_livre_url):
+def ecriture_categorie(categorie_livre_url :str):
     '''Function permettant d'extraire toutes les informations de tous les livres d'un même catégorie.
     Toutes ces informations seront écrites sur un même fichier CSV portant le nom de la categorie'''
 
@@ -225,17 +226,15 @@ def extraire_tout():
     print(f"Début de l'extraction des catégories")
     liste_categorie = extraire_liste_categorie_url()
     print(f"{len(liste_categorie)} catégories extraites")
+    print('------ Traitement par catégorie ------')
 
     # Extraction des informations de tous les livres pour chaque catégorie
-    for categorie_url in liste_categorie[:2]:
+    for categorie_url in liste_categorie:
         print(f"Traitement de la catégorie {categorie_url}")
         ecriture_categorie(categorie_url)
+        print('------------')
 
 
 if __name__ == '__main__':
-#    book_url = 'https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html'
-#    Recup = [recuperation_informations_page_livre(book_url)]
-#    ecriture_csv('Poetry',Recup)
+    extraire_tout()
 
-    liste_livre = extraire_liste_livres('https://books.toscrape.com/catalogue/category/books/default_15/index.html')
-    print(len(liste_livre))
