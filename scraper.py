@@ -198,6 +198,7 @@ def extraire_liste_livres(categorie_livre_url :str) -> List[str]:
 
         return donnees_liste_livre
 
+
 def ecriture_categorie(categorie_livre_url :str):
     '''Function permettant d'extraire toutes les informations de tous les livres d'un même catégorie.
     Toutes ces informations seront écrites sur un même fichier CSV portant le nom de la categorie'''
@@ -214,6 +215,7 @@ def ecriture_categorie(categorie_livre_url :str):
         donnees_par_livre.append(recuperation_informations_page_livre(livre))
 
     ecriture_csv(categorie, donnees_par_livre)
+
 
 def extraire_list_categorie_url_extraction(contenu_html: str) -> List[str]:
     # HTML PARSER
@@ -236,6 +238,7 @@ def extraire_list_categorie_url_extraction(contenu_html: str) -> List[str]:
         )
     return liste_categorie
 
+
 def extraire_liste_categorie_url() -> List[str]:
     '''Function permettant d'extraire dans une liste l'ensemble des categories disponibles sous forme d'url.'''
 
@@ -245,6 +248,7 @@ def extraire_liste_categorie_url() -> List[str]:
     if response.ok:
         categories = extraire_list_categorie_url_extraction(response.text)
         return categories
+
 
 def extraire_tout():
     '''Fonction permettant d'extraire les informations de tous les produits parmis toutes les catégories du site'''
@@ -256,7 +260,7 @@ def extraire_tout():
     print('------ Traitement par catégorie ------')
 
     # Extraction des informations de tous les livres pour chaque catégorie
-    for categorie_url in liste_categorie[:2]:
+    for categorie_url in liste_categorie:
         print(f"Traitement de la catégorie {categorie_url}")
         ecriture_categorie(categorie_url)
         print('------------')
