@@ -22,9 +22,10 @@ review_ratings_values = {
 def timing_decorator(func):
     def timing_function(*args):
         start = time() # Initialisation Timer
-        return func(*args) # Exécution fonction
+        result = func(*args) # Exécution fonction
         end = time() # Finalisation Timer
         print(f'Temps écoulé pour {func.__name__}: {end - start} secondes') # Print temps écoulé pour l'éxécution de la fonction
+        return result
     return timing_function
 
 
