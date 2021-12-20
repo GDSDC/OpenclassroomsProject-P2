@@ -1,4 +1,5 @@
 from typing import Any, Dict, List
+from time import time
 
 import requests
 from bs4 import BeautifulSoup
@@ -7,6 +8,15 @@ import os
 
 repertoire_de_travail = str(os.path.dirname(os.path.realpath(__file__)))
 books_home_url = 'https://books.toscrape.com/catalogue/category/books_1/index.html'
+
+
+def timing_decorator(func):
+    def timing_function(*args):
+        start = time() # Initialisation Timer
+        return func(*args) # Exécution fonction
+        end = time() # Finalisation Timer
+        print(f'Temps écoulé pour {func.__name__}: {end - start} secondes') # Print temps écoulé pour l'éxécution de la fonction
+    return timing_function
 
 
 def recuperation_informations_page_livre(url_page_livre: str) -> Dict[str, str]:
@@ -105,6 +115,7 @@ def telechargement_image_livre(image_url_value: str, upc_value: str):
     Toutes les images de couvertures seront placées dans le dossier '/Donnees_Resultat/Couvertures' présant dans le dossier de travail.
     Toutes les images de couvertures seront nommées par la valeur de l'UPC.'''
 
+
     # Création Dossier 'Couvertures' si nécessaire dans le dossier 'Donnees_Resultat'
     if os.path.exists(repertoire_de_travail + '/Donnees_Resultat' + '/Couvertures') == False:
         os.makedirs(repertoire_de_travail + '/Donnees_Resultat' + '/Couvertures')
@@ -187,7 +198,6 @@ def extraire_liste_livres(categorie_livre_url :str) -> List[str]:
 
         return donnees_liste_livre
 
-
 def ecriture_categorie(categorie_livre_url :str):
     '''Function permettant d'extraire toutes les informations de tous les livres d'un même catégorie.
     Toutes ces informations seront écrites sur un même fichier CSV portant le nom de la categorie'''
@@ -204,7 +214,6 @@ def ecriture_categorie(categorie_livre_url :str):
         donnees_par_livre.append(recuperation_informations_page_livre(livre))
 
     ecriture_csv(categorie, donnees_par_livre)
-
 
 def extraire_list_categorie_url_extraction(contenu_html: str) -> List[str]:
     # HTML PARSER
@@ -227,7 +236,6 @@ def extraire_list_categorie_url_extraction(contenu_html: str) -> List[str]:
         )
     return liste_categorie
 
-
 def extraire_liste_categorie_url() -> List[str]:
     '''Function permettant d'extraire dans une liste l'ensemble des categories disponibles sous forme d'url.'''
 
@@ -237,7 +245,6 @@ def extraire_liste_categorie_url() -> List[str]:
     if response.ok:
         categories = extraire_list_categorie_url_extraction(response.text)
         return categories
-
 
 def extraire_tout():
     '''Fonction permettant d'extraire les informations de tous les produits parmis toutes les catégories du site'''
@@ -249,7 +256,7 @@ def extraire_tout():
     print('------ Traitement par catégorie ------')
 
     # Extraction des informations de tous les livres pour chaque catégorie
-    for categorie_url in liste_categorie:
+    for categorie_url in liste_categorie[:2]:
         print(f"Traitement de la catégorie {categorie_url}")
         ecriture_categorie(categorie_url)
         print('------------')
