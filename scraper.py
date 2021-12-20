@@ -6,8 +6,17 @@ from bs4 import BeautifulSoup
 import csv
 import os
 
+# Constantes
 repertoire_de_travail = str(os.path.dirname(os.path.realpath(__file__)))
 books_home_url = 'https://books.toscrape.com/catalogue/category/books_1/index.html'
+review_ratings_values = {
+    'One': '1',
+    'Two': '2',
+    'Three': '3',
+    'Four': '4',
+    'Five': '5',
+}
+
 
 
 def timing_decorator(func):
@@ -79,11 +88,8 @@ def recuperation_informations_page_livre(url_page_livre: str) -> Dict[str, str]:
         data['category'] = str(block_categories.find_all('li')[2].find('a').text)
 
         # URL de l'image ('image_url')
-        block_image = soup.find('div', class_='item active')
-        data['image_url'] = str(
-            'http://books.toscrape.com/'
-            + str(block_image).split('"')[5].split('../../')[1]
-        )
+        block_image = soup.find('div', class_='item active').find('img')
+        data['image_url'] = 'http://books.toscrape.com/' + block_image['src']
 
         # Récupération image de couverture
         telechargement_image_livre(data['image_url'], data['universal_product_code'])
@@ -91,21 +97,8 @@ def recuperation_informations_page_livre(url_page_livre: str) -> Dict[str, str]:
 
         # Avis ('review_rating')
         block_avis = soup.find('div', class_='col-sm-6 product_main')
-        review_rating_string = (
-            str(block_avis.find_all('p')[2]).split('"')[1].split(' ')[1]
-        )
-        review_rating = ''
-        if review_rating_string == 'One':
-            review_rating = 1
-        elif review_rating_string == 'Two':
-            review_rating = 2
-        elif review_rating_string == 'Three':
-            review_rating = 3
-        elif review_rating_string == 'Four':
-            review_rating = 4
-        elif review_rating_string == 'Five':
-            review_rating = 5
-        data['review_rating'] = str(review_rating)
+        review_rating_string = str(block_avis.find_all('p')[2]).split('"')[1].split(' ')[1]
+        data['review_rating'] = review_ratings_values.get(review_rating_string,'')
 
         return data
 
@@ -268,4 +261,5 @@ def extraire_tout():
 
 if __name__ == '__main__':
     extraire_tout()
+
 
