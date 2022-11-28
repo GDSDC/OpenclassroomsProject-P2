@@ -78,7 +78,6 @@ git clone https://github.com/GDSDC/OpenclassroomsProject-P2.git
 ```
 
 Accédez au répertoire cloné.
-
 ```bash
 cd OpenclassroomsProject-P2
 ```
