@@ -29,7 +29,6 @@ capable d'extraire les informations tarifaires d'autres librairies en ligne.
 - Gérer les données à l'aide du processus ETL
 - Utiliser le contrôle de version avec Git et GitHub
 - Appliquer les bases de la programmation en Python
--
 
 <a id="techs"></a>
 
@@ -114,7 +113,7 @@ python scraper.py
 
 ## Résultat
 
-Une fois le script exécuté, le résultat se trouve dans le dossier donnees_resultat/.
+Une fois le script exécuté, le résultat se trouve dans le dossier `donnees_resultat/`.
 Vous y trouverez les fichiers CSV correspondant aux informations de tous les livres de chaque catégorie de livre
 présente sur le site https://books.toscrape.com/index.html. 
 
