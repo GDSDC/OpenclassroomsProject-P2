@@ -106,17 +106,17 @@ def recuperation_informations_page_livre(url_page_livre: str) -> Dict[str, str]:
 
 def telechargement_image_livre(image_url_value: str, upc_value: str):
     '''Fonction permettant de télécharger l'image de couverture du livre correspondant à l'url du livre en entrée.
-    Toutes les images de couvertures seront placées dans le dossier '/Donnees_Resultat/Couvertures' présant dans le dossier de travail.
+    Toutes les images de couvertures seront placées dans le dossier '/donnees_resultat/Couvertures' présant dans le dossier de travail.
     Toutes les images de couvertures seront nommées par la valeur de l'UPC.'''
 
 
-    # Création Dossier 'Couvertures' si nécessaire dans le dossier 'Donnees_Resultat'
-    if os.path.exists(repertoire_de_travail + '/Donnees_Resultat' + '/Couvertures') == False:
-        os.makedirs(repertoire_de_travail + '/Donnees_Resultat' + '/Couvertures')
+    # Création Dossier 'Couvertures' si nécessaire dans le dossier 'donnees_resultat'
+    if os.path.exists(repertoire_de_travail + '/donnees_resultat' + '/Couvertures') == False:
+        os.makedirs(repertoire_de_travail + '/donnees_resultat' + '/Couvertures')
 
     # Enregistrement de l'image de couverture
     r = requests.get(image_url_value, allow_redirects=True)
-    image_path = repertoire_de_travail + '/Donnees_Resultat' + '/Couvertures' + '/' + upc_value + '.jpeg'
+    image_path = repertoire_de_travail + '/donnees_resultat' + '/Couvertures' + '/' + upc_value + '.jpeg'
     open(image_path, 'wb').write(r.content)
 
 
@@ -137,12 +137,12 @@ def ecriture_csv(categorie_livre: str, liste_donnees_par_livre: List[Dict[str, s
         'image_url',
     ]
 
-    # Création Dossier 'Donnees_Resultat' si nécessaire dans le répertoire de travail
-    if os.path.exists(repertoire_de_travail + '/Donnees_Resultat') == False:
-        os.makedirs(repertoire_de_travail + '/Donnees_Resultat')
+    # Création Dossier 'donnees_resultat' si nécessaire dans le répertoire de travail
+    if os.path.exists(repertoire_de_travail + '/donnees_resultat') == False:
+        os.makedirs(repertoire_de_travail + '/donnees_resultat')
 
     # Création du CSV portant le nom de la catégorie et écriture des entêtes
-    nom_du_csv = repertoire_de_travail + '/Donnees_Resultat/' + str(categorie_livre) + '.csv'
+    nom_du_csv = repertoire_de_travail + '/donnees_resultat/' + str(categorie_livre) + '.csv'
     print(f'Ecriture du csv {nom_du_csv}')
 
     with open(nom_du_csv, 'w', newline='') as csvfile:
